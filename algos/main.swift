@@ -276,7 +276,7 @@ class Solution_searchInsert {
     }
 }
 
-print(Solution_searchInsert().searchInsert([1,3,5,6], 4))
+//print(Solution_searchInsert().searchInsert([1,3,5,6], 4))
 
 
 /**
@@ -311,7 +311,7 @@ class Solution_firstBadVersion {
 }
 
 
-class Solution {
+class Solution_rightSideView {
     func rightSideView(_ root: TreeNode?) -> [Int] {
         guard let root = root else {
             return []
@@ -323,3 +323,175 @@ class Solution {
         return result
     }
 }
+
+
+class Solution_minDepth {
+    func minDepth(_ root: TreeNode?) -> Int {
+        guard let root = root else { return 0 }
+        return minDepth(root, height: 1)
+    }
+    
+    private func minDepth( _ root: TreeNode, height: Int) -> Int {
+        if root.left == nil && root.right == nil {
+            return height
+        } else {
+            var leftMinDepth = Int.max
+            if let leftNode = root.left {
+                leftMinDepth = minDepth(leftNode, height: height + 1)
+            }
+            
+            var rightMinDepth = Int.max
+            if let rightNode = root.right {
+                rightMinDepth = minDepth(rightNode, height: height + 1)
+            }
+            
+            return min(leftMinDepth, rightMinDepth)
+        }
+    }
+}
+
+//print(Solution().minDepth(TreeFactory.createTreeFromArray(arr: [3,9,20,nil,nil,15,7])))
+
+//let input1 = TreeFactory.createTreeFromArray(arr: [2,nil,3,nil,4,nil,5,nil,6])
+//print(Solution().minDepth(input1))
+
+//print(Solution().minDepth(nil))
+
+
+class Solution_climbStairs {
+    var countedHistory:[Int:Int] = [:]
+    func climbStairs(_ n: Int) -> Int {
+        if n == 0 {
+            return 1
+        }
+        
+        if n < 0 {
+            return 0
+        }
+        
+        if let alreadyCounted = self.countedHistory[n] {
+            return alreadyCounted
+        }
+        
+        let result = climbStairs(n - 1) + climbStairs(n - 2)
+
+        self.countedHistory[n] = result
+        
+        return result
+    }
+}
+
+//print(Solution_climbStairs().climbStairs(3))
+
+class Solution_isValidSudoku {
+    func isValidSudoku(_ board: [[Character]]) -> Bool {
+        // valid rows
+        for row in board {
+            if validateItems(charArr: row) == false {
+                return false
+            }
+        }
+        
+        // valid columns
+        for j in 0...(board[0].count-1) {
+            
+            var tempArr:[Character] = []
+            for i in 0...(board.count-1) {
+                tempArr.append(board[i][j])
+            }
+            
+            if validateItems(charArr: tempArr) == false {
+                return false
+            }
+            
+            tempArr = []
+        }
+        
+        
+        // valid small squares
+        return false
+    }
+    
+    func validateItems(charArr: [Character]) -> Bool {
+        var checker:[Character: Bool] = [:]
+        
+        for ch in charArr {
+            if ch != "." {
+                if checker[ch] != nil {
+                    return false
+                } else {
+                    checker[ch] = true
+                }
+            }
+        }
+        
+        return false
+    }
+}
+
+
+class Solution {
+    func numIslands(_ grid: [[Character]]) -> Int {
+        
+        // initialize checker of same size as grid
+        let gridSizeEmptyArray = [Bool](repeating: false, count: grid[0].count)
+        self.visited = [[Bool]](repeating: gridSizeEmptyArray, count: grid.count)
+        
+        // count islands inside grid
+        var islandsCounter = 0
+        for i in 0...(grid.count-1) {
+            for j in 0...(grid[0].count-1) {
+                if !visited[i][j] && self.isIsland(grid: grid, i: i, j: j) {
+                    islandsCounter = islandsCounter + 1
+                }
+            }
+        }
+        return islandsCounter
+    }
+    
+    private var visited: [[Bool]] = []
+    
+    private func isIsland(grid: [[Character]], i: Int, j: Int) -> Bool {
+        if grid[i][j] == "1" && visited[i][j] == false {
+            
+            visited[i][j] = true
+            
+            // travel right
+            if j+1 < grid[0].count {
+                isIsland(grid: grid, i: i, j: j+1)
+            }
+            
+            // travel bottom
+            if i+1 < grid.count {
+                isIsland(grid: grid, i: i+1, j: j)
+            }
+            
+            // left
+            if j-1 >= 0 {
+                isIsland(grid: grid, i: i, j: j-1)
+            }
+            
+            // top
+            if i-1 >= 0 {
+                isIsland(grid: grid, i: i-1, j: j)
+            }
+            
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+let grid: [[Character]] = [["1","1","1"],
+            ["0","1","0"],
+            ["1","1","1"]]
+
+//let grid: [[Character]] = [
+//  ["1","1","1","1","0"],
+//  ["1","1","0","1","0"],
+//  ["1","1","0","0","0"],
+//  ["0","0","1","0","1"]
+//]
+
+print(Solution().numIslands(grid))
