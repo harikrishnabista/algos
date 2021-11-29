@@ -65,17 +65,13 @@ class Solution_mergeTwoLists {
     }
 }
 
-
-//[1,2,4]
-//[1,3,4]
-
-let arr2 = [1]
 let arr1: [Int] = []
+let arr2 = [1]
 
-let l1 = convertArrayToLinkedList(arr: arr1)
-let l2 = convertArrayToLinkedList(arr: arr2)
+let l1 = LinkedListFactory.convertArrayToLinkedList(arr: arr1)
+let l2 = LinkedListFactory.convertArrayToLinkedList(arr: arr2)
 
-//print(convertLinkedListToArray(list: Solution_mergeTwoLists().mergeTwoLists(l1, l2)))
+print(LinkedListFactory.convertLinkedListToArray(list: Solution_mergeTwoLists().mergeTwoLists(l1, l2)))
 
 
 class Solution_hasPathSum {
